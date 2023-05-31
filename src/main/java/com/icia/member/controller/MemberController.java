@@ -6,10 +6,7 @@ import com.icia.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +32,20 @@ public class MemberController {
         model.addAttribute("memberList", memberDTOList);
         return "memberpages/memberList";
     }
-
-
+    @GetMapping("/update/{id}")
+    public String updateForm(@PathVariable Long id, Model model){
+        MemberDTO memberDTO=memberService.findById(id);
+        model.addAttribute("member", memberDTO);
+        return "memberpages/memberUpdate";
+    }
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberDTO){
+        memberService.update(memberDTO);
+        return "memberpages/memberList";
+    }
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id){
+        memberService.delete(id);
+        return "redirect:/";
+    }
 }
