@@ -53,19 +53,19 @@ public class MemberController {
             return "memberPages/memberLogin";
         }
     }
-    @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable Long id, Model model){
-        MemberDTO memberDTO = memberService.findById(id);
-        model.addAttribute("member", memberDTO);
-        return "memberPages/memberUpdate";
-    }
-    @PostMapping("/update")
-    public String update(@ModelAttribute MemberDTO memberDTO) {
-        memberService.update(memberDTO);
-        return "memberPages/memberList";
-    }
+//    @GetMapping("/update/{id}")
+//    public String updateForm(@PathVariable Long id, Model model){
+//        MemberDTO memberDTO = memberService.findById(id);
+//        model.addAttribute("member", memberDTO);
+//        return "memberPages/memberUpdate";
+//    }
+//    @PostMapping("/update")
+//    public String update(@ModelAttribute MemberDTO memberDTO) {
+//        memberService.update(memberDTO);
+//        return "memberPages/memberList";
+//    }
 
-//    @GetMapping("/delete/{id}")
+    //    @GetMapping("/delete/{id}")
 //    public String delete(@PathVariable Long id) {
 //        memberService.delete(id);
 //        return "redirect:/";
@@ -76,21 +76,43 @@ public class MemberController {
         session.invalidate();
         return "redirect:/";
     }
+
     @PostMapping("/login/axios")
-    public ResponseEntity memberLoginAxios(@RequestBody MemberDTO memberDTO, HttpSession session) throws Exception{
+    public ResponseEntity memberLoginAxios(@RequestBody MemberDTO memberDTO, HttpSession session) throws Exception {
         memberService.loginAxios(memberDTO);
         session.setAttribute("loginEmail", memberDTO.getMemberEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/axios/{id}")
-    public ResponseEntity datailAxios(@PathVariable Long id) throws Exception{
+    public ResponseEntity datailAxios(@PathVariable Long id) throws Exception {
         MemberDTO memberDTO = memberService.findById(id);
         return new ResponseEntity<>(memberDTO, HttpStatus.OK);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         memberService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/update/{id}")
+    public String updateForm(@PathVariable Long id, Model model) {
+        MemberDTO memberDTO = memberService.findById(id);
+        model.addAttribute("member", memberDTO);
+        return "memberPages/memberUpdate";
+    }
+
+    @PostMapping("/update/{id}")
+    public String update(@ModelAttribute MemberDTO memberDTO) {
+        memberService.update(memberDTO);
+        return "memberPages/memberList";
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity updateAxios(@PathVariable Long id, @ModelAttribute MemberDTO memberDTO) throws Exception {
+        memberService.findById(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

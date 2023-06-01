@@ -39,12 +39,12 @@
     </tr>
 </table>
 <div id="detail-area">
-    <q>   </q><br>
 
 </div>
 <div th:replace="component/footer :: footer"></div>
 </body>
 <script>
+
     const member_delete = (id) => {
         // location.href="/member/delete/"+id; 링크방식
         axios({
@@ -82,7 +82,11 @@
                         "        <tr>\n" +
                         "            <th>이름</th>\n" +
                         "            <td>" + res.data.memberName+"</td>\n" +
-                        "        </tr>\n" +
+                        "        </tr>\n " +
+                        "            <th>패스워드</th>\n" +
+                        "             <td>" + res.data.memberPassword+"</td>\n" +
+                        "        <tr>\n + " +
+                        "        </tr>" +
                         "        <tr>\n" +
                         "            <th>생년월일</th>\n" +
                         "            <td>" + res.data.memberBirth+"</td>\n" +
