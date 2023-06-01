@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,7 @@ public class MemberService {
         MemberEntity memberEntity = MemberEntity.toSaveEntity(memberDTO);
         return memberRepository.save(memberEntity).getId();
     }
+
     public List<MemberDTO> findAll() {
         List<MemberEntity> memberEntityList = memberRepository.findAll();
         List<MemberDTO> memberDTOList = new ArrayList<>();
@@ -28,18 +30,16 @@ public class MemberService {
         return memberDTOList;
     }
 
-    public MemberDTO findById(Long id) {
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
-        if(optionalMemberEntity.isPresent()){
-            System.out.println("있다");
-            MemberEntity memberEntity = optionalMemberEntity.get();
-            MemberDTO memberDTO = MemberDTO.toDTO(memberEntity);
-            return memberDTO;
-        }else {
-            System.out.println("없다");
-            return null;
+    public boolean login(MemberDTO memberDTO) {
+        Optional<MemberEntity> memberEntity =
+                memberRepository.findByMemberEmailAndMemberPassword(memberDTO.getMemberEmail(), memberDTO.getMemberPassword());
+        if (memberEntity.isPresent()) {
+            return true;
+        } else {
+            return false;
         }
     }
+
     public void delete(Long id){
         memberRepository.deleteById(id);
     }
@@ -47,6 +47,27 @@ public class MemberService {
     public void update(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.toUpdateEntity(memberDTO);
         memberRepository.save(memberEntity);
+
+    }
+
+    public void loginAxios(MemberDTO memberDTO) {
+        // chaining method(체이닝 메서드) -> 꼬리에 꼬리를 무는
+        memberRepository.findByMemberEmailAndMemberPassword(memberDTO.getMemberEmail(), memberDTO.getMemberPassword())
+                        .orElseThrow(() -> new NoSuchElementException("이메일 또는 패스워드가 일치하지 않습니다"));
+    }
+
+
+    public MemberDTO findById(Long id) {
+//        -> : 익명함수 처리 자바스크립트의 () 자리
+        MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return MemberDTO.toDTO(memberEntity);
+//        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+//        if(optionalMemberEntity.isPresent()){
+//            MemberEntity memberEntity = optionalMemberEntity.get();
+//            return MemberDTO.toDTO(memberEntity);
+//        }else {
+//            return null;
+//        } 또 다른 표현
 
     }
 }

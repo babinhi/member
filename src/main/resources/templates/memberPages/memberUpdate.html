@@ -2,13 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <th:block th:replace="component/config :: config"></th:block>
 </head>
 <body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
 <form action="/member/update" method="post">
     <input type="text" th:value="${member.id}" name="id"><br>
-    <input type="text" th:value="${member.memberEmail}" name="memberEmail" readonly><br>
+    <input type="text" th:value="${member.memberEmail}"><br>
     <input type="text" th:value="${member.memberPassword}"><br>
     <input type="text" th:value="${member.memberName}"><br>
     <input type="date" th:value="${member.memberBirth}"><br>
