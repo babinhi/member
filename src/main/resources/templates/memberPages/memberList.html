@@ -45,6 +45,19 @@
 <div th:replace="component/footer :: footer"></div>
 </body>
 <script>
+    const member_delete = (id) => {
+        // location.href="/member/delete/"+id; 링크방식
+        axios({
+            method: "delete",
+            url:"/member/"+id
+        }).then(res => {
+            alert("회원삭제가 완료되었습니다");
+            location.href="/member/";
+        }).catch(err=>{
+            alert("다시 시도해주세요");
+        })
+
+    }
     const member_detail = (id) => {
         // location.href="/member/"+id;
         const datailArea = document.querySelector("#detail-area");

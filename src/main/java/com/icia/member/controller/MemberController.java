@@ -65,11 +65,11 @@ public class MemberController {
         return "memberPages/memberList";
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        memberService.delete(id);
-        return "redirect:/";
-    }
+//    @GetMapping("/delete/{id}")
+//    public String delete(@PathVariable Long id) {
+//        memberService.delete(id);
+//        return "redirect:/";
+//    }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // 세션에 담긴 값 전체 삭제
@@ -86,6 +86,11 @@ public class MemberController {
     public ResponseEntity datailAxios(@PathVariable Long id) throws Exception{
         MemberDTO memberDTO = memberService.findById(id);
         return new ResponseEntity<>(memberDTO, HttpStatus.OK);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        memberService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
