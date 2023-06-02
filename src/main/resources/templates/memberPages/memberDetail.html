@@ -9,23 +9,23 @@
     <table class="table table-striped">
         <tr>
             <th>id</th>
-            <td></td>
+            <td th:text="${member.id}"></td>
         </tr>
         <tr>
             <th>이메일</th>
-            <td></td>
+            <td th:text="${member.memberEmail}"></td>
         </tr>
         <tr>
             <th>이름</th>
-            <td></td>
+            <td th:text="${member.memberName}"></td>
         </tr>
         <tr>
             <th>생년월일</th>
-            <td></td>
+            <td th:text="${member.memberBirth}"></td>
         </tr>
         <tr>
             <th>전화번호</th>
-            <td></td>
+            <td th:text="${member.memberMobile}"></td>
         </tr>
     </table>
 </div>

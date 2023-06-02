@@ -7,15 +7,59 @@
 <body>
 <div th:replace="component/header :: header"></div>
 <div th:replace="component/nav :: nav"></div>
-<input type="text" th:name="id" th:value="${member.id}" name="id" readonly><br>
-<input type="text" th:name="memberEmail" th:value="${member.memberEmail}" readonly><br>
-<input type="text" th:name="memberPassword" th:value="${member.memberPassword}"><br>
-<input type="text" th:name="memberName" th:value="${member.memberName}"><br>
-<input type="date" th:name="memberBirth" th:value="${member.memberBirth}"><br>
-<input type="text" th:name="memberMobile" th:value="${member.memberMobile}"><br>
-<input type="button" onclick="update()" value="수정하기">
+
+<!--    <input type="text" th:name="id" th:value="${member.id}" name="id" readonly><br>-->
+<!--    <input type="text" th:name="memberEmail" th:value="${member.memberEmail}" readonly><br>-->
+<!--    <input type="text" th:name="memberPassword" th:value="${member.memberPassword}"><br>-->
+<!--    <input type="text" th:name="memberName" th:value="${member.memberName}"><br>-->
+<!--    <input type="date" th:name="memberBirth" th:value="${member.memberBirth}"><br>-->
+<!--    <input type="text" th:name="memberMobile" th:value="${member.memberMobile}"><br>-->
+<!--    <input type="button" onclick="update()" value="수정하기">-->
+<!-- 아래는 선생님-->
+<form action="/member/update" method="post">
+    <input type="hidden" name="id" th:value="${member.id}"> <br>
+    <input type="text" name="memberEmail" th:value="${member.memberEmail}" placeholder="이메일" readonly> <br>
+    <p id="check-result"></p>
+    <input type="text" name="memberPassword" placeholder="비밀번호"> <br>
+    <input type="text" name="memberName" th:value="${member.memberName}" placeholder="이름"> <br>
+    <input type="date" name="memberBirth" th:value="${member.memberBirth}"> <br>
+    <input type="text" name="memberMobile" th:value="${member.memberMobile}" placeholder="전화번호"> <br>
+    <input type="button" value="수정" onclick="member_update()">
+</form>
 </body>
-<script>
+<script th:inline="javascript">
+    const member_update = ()=>{
+        // 수정을 하든 안하든 모든 정보는 가져가야한다
+        const passDB = [[${member.memberPassword}]];
+        const password = document.querySelector('input[name="memberPassword"]').value;
+        const id = document.querySelector('input[name="id"]').value;
+        const email = document.querySelector('input[name="memberEmail"]').value;
+        const name = document.querySelector('input[name="memberName"]').value;
+        const birth = document.querySelector('input[name="memberBirth"]').value;
+        const mobile = document.querySelector('input[name="memberMobile"]').value;
+        if (passDB == password) {
+            axios({
+                method: "put",
+                url: "/member/" + id,
+                data: {
+                    id: id,
+                    memberEmail: email,
+                    memberPassword: password,
+                    memberName: name,
+                    memberBirth: birth,
+                    memberMobile: mobile
+                }
+            }).then(res =>{
+                location.href="/member/" + id;
+            }).catch(err =>{
+                alert("회원수정에 실패하였습니다");
+            })
+
+        }else{
+            alert("비밀번호가 일치하지 않습니다");
+        }
+
+    }
     const update = (id) => {
         const memberId = document.querySelector('input[name="id"]').value;
         const email = document.querySelector('input[name="memberEmail"]').value;
@@ -41,6 +85,7 @@
             console.log("err", err);
         });
     }
+
 
 </script>
 </html>

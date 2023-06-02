@@ -70,4 +70,12 @@ public class MemberService {
 //        } 또 다른 표현
 
     }
+
+    public MemberDTO findByMemberEmail(String loginEmail) {
+        //조회를 하면서 없으면 예외처리, 있으면 MemberEntity 리턴
+        MemberEntity memberEntity = memberRepository.findByMemberEmail(loginEmail).orElseThrow(()-> new NoSuchElementException());
+        // 있는경우 DTO로 변환하며 컨트롤러로 변환
+        return MemberDTO.toDTO(memberEntity);
+
+    }
 }

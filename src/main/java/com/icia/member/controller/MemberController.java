@@ -96,21 +96,51 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable Long id, Model model) {
-        MemberDTO memberDTO = memberService.findById(id);
-        model.addAttribute("member", memberDTO);
-        return "memberPages/memberUpdate";
-    }
+//    @GetMapping("/update/{id}")
+//    public String updateForm(@PathVariable Long id, Model model) {
+//        MemberDTO memberDTO = memberService.findById(id);
+//        model.addAttribute("member", memberDTO);
+//        return "memberPages/memberUpdate";
+//    }
 
-    @PostMapping("/update")
-    public String update(@ModelAttribute MemberDTO memberDTO) {
-        memberService.update(memberDTO);
-        return "memberPages/memberList";
-    }
+
+//    @PostMapping("/update")
+//    public String update(@ModelAttribute MemberDTO memberDTO) {
+//        memberService.update(memberDTO);
+//        return "memberPages/memberList";
+//    }
 
     @PutMapping("/update/axios")
     public ResponseEntity updateAxios(@RequestBody MemberDTO memberDTO) throws Exception {
+        memberService.update(memberDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 아래는 선생님
+    @GetMapping("/mypage")
+    public String myPage() {
+        return "memberPages/memberMain";
+    }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        MemberDTO memberDTO = memberService.findById(id);
+        model.addAttribute("member", memberDTO);
+        return "memberPages/memberDetail";
+    }
+
+    @GetMapping("/update")
+    public String updateForm(HttpSession session, Model model) {
+        String loginEmail = (String) session.getAttribute("loginEmail");
+        MemberDTO memberDTO = memberService.findByMemberEmail(loginEmail);
+        model.addAttribute("member", memberDTO);
+//        model.addAttribute("member", memberService.findByMemberEmail(loginEmail)); 위에 두줄을 한번에 처리하는 방법
+
+        return "memberPages/memberUpdate";
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody MemberDTO memberDTO) {
         memberService.update(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
