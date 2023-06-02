@@ -78,4 +78,13 @@ public class MemberService {
         return MemberDTO.toDTO(memberEntity);
 
     }
+
+    public boolean emailCheck(String memberEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+        if(optionalMemberEntity.isEmpty()){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

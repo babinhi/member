@@ -9,8 +9,15 @@
 <div th:replace="component/header :: header"></div>
 <div th:replace="component/nav :: nav"></div>
 <form action="/member/save" method="post">
-    <input type="text" name="memberEmail" placeholder="이메일" id="member-email" onblur="email_check()"> <br>
-    <p id="check-result"></p>
+    <input type="text" placeholder="이메일" name="memberEmail" id="member-email" onblur="email_check()">
+    <p id="email-result">
+        <span id="good" style="color: green; display: none">
+            사용 가능한 이메일 입니다
+        </span>
+        <span id="no" style="color: red; display: none">
+            이미 사용중인 이메일 입니다
+        </span>
+    </p>
     <input type="text" name="memberPassword" placeholder="비밀번호"> <br>
     <input type="text" name="memberName" placeholder="이름"> <br>
     <input type="date" name="memberBirth"> <br>
@@ -19,4 +26,33 @@
 </form>
 <div th:replace="component/footer :: footer"></div>
 </body>
+<script>
+    const email_check = () => {
+        // const email = document.getElementById("member-email").value;
+        // const result = document.getElementById("check-result");
+        document.querySelector("#good").style.display="none";
+        document.querySelector("#no").style.display="none";
+        const email = document.querySelector("#member-email").value;
+
+        axios({
+            method: "post",
+            url: "/member/dup-check",
+            async: false,
+            data: {
+                memberEmail: email
+            }
+        }).then(res => {
+            // 중복된 경우 controller에서 findByMemberEmail를 사용했을때
+            console.log("then");
+            //중복되지 않는 경우 emailCheck라는 새로운 메소드 생성
+            document.querySelector("#good").style.display = "block";
+
+        }).catch(err => {
+            // 중복되지 않은 경우 controller에서 findByMemberEmail를 사용했을때
+            console.log("catch");
+            // 중복되지 않는 경우 emailCheck라는 새로운 메소드 생성
+            document.querySelector("#no").style.display = "block";
+            });
+    }
+</script>
 </html>
