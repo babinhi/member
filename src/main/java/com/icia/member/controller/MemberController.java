@@ -103,16 +103,15 @@ public class MemberController {
         return "memberPages/memberUpdate";
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/update")
     public String update(@ModelAttribute MemberDTO memberDTO) {
         memberService.update(memberDTO);
         return "memberPages/memberList";
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity updateAxios(@PathVariable Long id, @ModelAttribute MemberDTO memberDTO) throws Exception {
-        memberService.findById(id);
-
+    @PutMapping("/update/axios")
+    public ResponseEntity updateAxios(@RequestBody MemberDTO memberDTO) throws Exception {
+        memberService.update(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

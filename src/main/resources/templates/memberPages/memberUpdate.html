@@ -7,8 +7,8 @@
 <body>
 <div th:replace="component/header :: header"></div>
 <div th:replace="component/nav :: nav"></div>
-<input type="text" th:name="id" th:value="${member.id}" name="id"><br>
-<input type="text" th:name="memberEmail" th:value="${member.memberEmail}"><br>
+<input type="text" th:name="id" th:value="${member.id}" name="id" readonly><br>
+<input type="text" th:name="memberEmail" th:value="${member.memberEmail}" readonly><br>
 <input type="text" th:name="memberPassword" th:value="${member.memberPassword}"><br>
 <input type="text" th:name="memberName" th:value="${member.memberName}"><br>
 <input type="date" th:name="memberBirth" th:value="${member.memberBirth}"><br>
@@ -18,34 +18,29 @@
 <script>
     const update = (id) => {
         const memberId = document.querySelector('input[name="id"]').value;
-        const memberEmail = document.querySelector('input[name="memberEmail"]').value;
-        const memberPassword = document.querySelector('input[name="memberPassword"]').value;
-        const memberName = document.querySelector('input[name="memberName"]').value;
-        const memberBirth = document.querySelector('input[name="memberBirth"]').value;
-        const memberMobile = document.querySelector('input[name="memberMobile"]').value;
-
+        const email = document.querySelector('input[name="memberEmail"]').value;
+        const password = document.querySelector('input[name="memberPassword"]').value;
+        const name = document.querySelector('input[name="memberName"]').value;
+        const birth = document.querySelector('input[name="memberBirth"]').value;
+        const mobile = document.querySelector('input[name="memberMobile"]').value;
         axios({
             method: "put",
-            url: "/member/updateAxios/" + id,
+            url: "/member/update/axios",
             data: {
-                memberEmail: memberEmail,
-                memberPassword: memberPassword,
-                memberName: memberName,
-                memberBirth: memberBirth,
-                memberMobile: memberMobile
+                id: memberId,
+                memberEmail: email,
+                memberPassword: password,
+                memberName: name,
+                memberBirth: birth,
+                memberMobile: mobile
             }
-        })
-            .then((response) => {
-                // 요청이 성공적으로 처리된 경우
-                console.log(response.data); // 응답 데이터 출력 또는 처리
-
-                // 여기에서 필요한 작업을 수행하세요
-            })
-            .catch((error) => {
-                // 오류가 발생한 경우
-                console.error(error);
-            });
-    };
+        }).then(res => {
+            console.log("res", res);
+            location.href = "/member/";
+        }).catch(err => {
+            console.log("err", err);
+        });
+    }
 
 </script>
 </html>
