@@ -18,10 +18,35 @@
             이미 사용중인 이메일 입니다
         </span>
     </p>
-    <input type="text" name="memberPassword" placeholder="비밀번호"> <br>
+    <input type="text" name="memberPassword" placeholder="비밀번호" id="member-pass" onblur="pass_check()"> <br>
+    <p id="pass-result">
+        <span id="passP" style="color: green; display: none">
+            패스워드가 확인되었습니다
+        </span>
+        <span id="passN" style="color: red; display: none">
+            패스워드의 형식이 올바르지 않습니다
+        </span>
+    </p>
+    <input type="text" name="PasswordCheck" placeholder="비밀번호" id="check-pass" onblur="check_pass()"> <br>
+    <p id="passCheck-result">
+        <span id="passCheckP" style="color: green; display: none">
+            패스워드가 일치합니다
+        </span>
+        <span id="passCheckN" style="color: red; display: none">
+            패스워드가 일치하지 않습니다
+        </span>
+    </p>
     <input type="text" name="memberName" placeholder="이름"> <br>
     <input type="date" name="memberBirth"> <br>
-    <input type="text" name="memberMobile" placeholder="전화번호"> <br>
+    <input type="text" name="memberMobile" placeholder="전화번호" id="member-mobile" onblur="mobile_check()"> <br>
+    <p id="mobile-result">
+        <span id="mobileP" style="color: green; display: none">
+            전화번호의 형식이 올바르지 않습니다
+        </span>
+        <span id="mobileN" style="color: red; display: none">
+            이미 사용중인 이메일 입니다
+        </span>
+    </p>
     <input type="submit" value="회원가입">
 </form>
 <div th:replace="component/footer :: footer"></div>
@@ -30,8 +55,8 @@
     const email_check = () => {
         // const email = document.getElementById("member-email").value;
         // const result = document.getElementById("check-result");
-        document.querySelector("#good").style.display="none";
-        document.querySelector("#no").style.display="none";
+        document.querySelector("#good").style.display = "none";
+        document.querySelector("#no").style.display = "none";
         const email = document.querySelector("#member-email").value;
 
         axios({
@@ -52,7 +77,42 @@
             console.log("catch");
             // 중복되지 않는 경우 emailCheck라는 새로운 메소드 생성
             document.querySelector("#no").style.display = "block";
-            });
+        });
     }
+
+    const pass_check = () => {
+        const password = document.querySelector("#member-pass").value;
+        const Presult = document.querySelector("#pass-result");
+        const exp = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,12}$/;
+
+        document.querySelector("#passP").style.display = "none";
+        document.querySelector("#passN").style.display = "none";
+
+        if (password.match(exp)) {
+            Presult.innerHTML = "안전한 비밀번호입니다.";
+            Presult.style.color = "green";
+
+            axios({
+                method: "post",
+                url: "/member/password-check",
+                data: {
+                    memberPassword: password
+                }
+
+            }).then(res => {
+                if (response.data.valid) {
+                    document.querySelector("#passP").style.display = "block";
+                } else {
+                    document.querySelector("#passN").style.display = "block";
+                }
+            })
+                .catch(err => {
+                    console.log("err:", err);
+                });
+        } else {
+            Presult.innerHTML = "영어 소문자, 숫자, 특수문자(!@#$%^&*)를 포함한 8~12자의 비밀번호를 입력해주세요.";
+            Presult.style.color = "red";
+        }
+    };
 </script>
 </html>

@@ -16,4 +16,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     //  select * from member_table where member_email=? and member_password=?
     Optional<MemberEntity> findByMemberEmailAndMemberPassword
     (String memberEmail, String memberPassword);
+
 }
